@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 2800" fill="none">
+  <defs>
+    <linearGradient id="forestSky" x1="450" y1="0" x2="450" y2="2800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17231D" />
+      <stop offset="0.26" stop-color="#111A15" />
+      <stop offset="0.68" stop-color="#0C1511" />
+      <stop offset="1" stop-color="#08110D" />
+    </linearGradient>
+    <radialGradient id="forestMistTop" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(322 394) rotate(90) scale(382 430)">
+      <stop offset="0" stop-color="#8EA69D" stop-opacity="0.3" />
+      <stop offset="1" stop-color="#8EA69D" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="forestMistMid" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(518 1180) rotate(90) scale(388 520)">
+      <stop offset="0" stop-color="#B8C9C1" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#B8C9C1" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="forestMistLow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(446 2092) rotate(90) scale(342 560)">
+      <stop offset="0" stop-color="#D7E1D7" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#D7E1D7" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ridgeDark" x1="450" y1="480" x2="450" y2="2800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#18231D" />
+      <stop offset="1" stop-color="#08110D" />
+    </linearGradient>
+    <linearGradient id="ridgeSoft" x1="450" y1="680" x2="450" y2="2800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#223028" />
+      <stop offset="1" stop-color="#0A120E" />
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="2800" fill="url(#forestSky)" />
+  <rect width="900" height="2800" fill="url(#forestMistTop)" />
+  <rect width="900" height="2800" fill="url(#forestMistMid)" />
+  <rect width="900" height="2800" fill="url(#forestMistLow)" />
+
+  <path d="M0 640L98 584L196 620L308 548L408 602L524 522L652 596L752 540L900 628V2800H0V640Z" fill="url(#ridgeSoft)" opacity="0.85" />
+  <path d="M0 920L112 852L218 914L336 832L452 904L572 818L696 900L796 842L900 906V2800H0V920Z" fill="url(#ridgeDark)" opacity="0.94" />
+  <path d="M0 1302L84 1214L156 1332L232 1192L314 1338L394 1184L482 1350L556 1224L646 1366L730 1216L814 1360L900 1246V2800H0V1302Z" fill="#0B130F" opacity="0.92" />
+  <path d="M0 1820L76 1704L146 1832L226 1682L302 1840L378 1660L460 1850L534 1710L616 1862L700 1698L784 1860L860 1742L900 1820V2800H0V1820Z" fill="#08100D" opacity="0.96" />
+  <path d="M0 2288C72 2202 124 2210 180 2286C236 2366 288 2362 346 2294C408 2220 470 2226 528 2300C584 2370 642 2368 702 2296C770 2214 826 2218 900 2308V2800H0V2288Z" fill="#050906" />
+
+  <g opacity="0.44">
+    <path d="M68 1150L102 1042L136 1150H68Z" fill="#16231C" />
+    <path d="M156 1174L196 1048L236 1174H156Z" fill="#16231C" />
+    <path d="M274 1148L318 1008L362 1148H274Z" fill="#16231C" />
+    <path d="M398 1160L442 1018L486 1160H398Z" fill="#16231C" />
+    <path d="M530 1144L574 1004L618 1144H530Z" fill="#16231C" />
+    <path d="M662 1164L708 1014L754 1164H662Z" fill="#16231C" />
+    <path d="M782 1150L824 1016L866 1150H782Z" fill="#16231C" />
+  </g>
+
+  <g opacity="0.38">
+    <path d="M42 2116L80 1988L118 2116H42Z" fill="#111A15" />
+    <path d="M132 2138L178 1988L224 2138H132Z" fill="#111A15" />
+    <path d="M252 2118L304 1950L356 2118H252Z" fill="#111A15" />
+    <path d="M392 2142L442 1982L492 2142H392Z" fill="#111A15" />
+    <path d="M528 2116L576 1962L624 2116H528Z" fill="#111A15" />
+    <path d="M654 2132L706 1968L758 2132H654Z" fill="#111A15" />
+    <path d="M778 2108L826 1956L874 2108H778Z" fill="#111A15" />
+  </g>
+</svg>

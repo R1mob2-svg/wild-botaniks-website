@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 760" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="800" y1="0" x2="800" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#16231d" />
+      <stop offset="0.48" stop-color="#0f1915" />
+      <stop offset="1" stop-color="#09110d" />
+    </linearGradient>
+    <radialGradient id="mistLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 178) rotate(16) scale(508 228)">
+      <stop offset="0" stop-color="#8CA59C" stop-opacity="0.38" />
+      <stop offset="1" stop-color="#8CA59C" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="mistRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1220 148) rotate(-12) scale(448 208)">
+      <stop offset="0" stop-color="#A7C6BF" stop-opacity="0.26" />
+      <stop offset="1" stop-color="#A7C6BF" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="mistLow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(820 520) rotate(90) scale(224 760)">
+      <stop offset="0" stop-color="#D8E2D7" stop-opacity="0.13" />
+      <stop offset="1" stop-color="#D8E2D7" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ridgeOne" x1="800" y1="236" x2="800" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#233229" />
+      <stop offset="1" stop-color="#132019" />
+    </linearGradient>
+    <linearGradient id="ridgeTwo" x1="800" y1="322" x2="800" y2="608" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1A271F" />
+      <stop offset="1" stop-color="#0E1712" />
+    </linearGradient>
+    <linearGradient id="ridgeThree" x1="800" y1="430" x2="800" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#122019" />
+      <stop offset="1" stop-color="#08110D" />
+    </linearGradient>
+    <linearGradient id="forest" x1="800" y1="502" x2="800" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F1A14" />
+      <stop offset="1" stop-color="#050906" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="760" fill="url(#sky)" />
+  <rect width="1600" height="760" fill="url(#mistLeft)" />
+  <rect width="1600" height="760" fill="url(#mistRight)" />
+  <rect width="1600" height="760" fill="url(#mistLow)" />
+
+  <path d="M0 392L132 352L246 372L382 314L520 346L672 262L826 318L994 256L1142 296L1288 236L1436 292L1600 250V760H0V392Z" fill="url(#ridgeOne)" opacity="0.86" />
+  <path d="M0 462L158 424L324 452L496 392L682 432L850 366L1008 422L1174 356L1360 408L1600 336V760H0V462Z" fill="url(#ridgeTwo)" opacity="0.92" />
+  <path d="M0 550L132 506L252 540L418 472L618 546L826 476L1034 552L1228 482L1438 554L1600 516V760H0V550Z" fill="url(#ridgeThree)" />
+
+  <path d="M0 602C74 558 138 566 188 604C234 638 286 646 338 610C392 572 452 580 512 624C562 662 612 664 670 624C734 580 788 590 848 634C896 668 954 668 1016 628C1082 584 1146 592 1200 636C1248 676 1304 678 1368 640C1444 594 1514 604 1600 668V760H0V602Z" fill="url(#forest)" opacity="0.96" />
+
+  <g opacity="0.34">
+    <path d="M52 640L78 580L104 640H52Z" fill="#17251E" />
+    <path d="M132 638L164 560L196 638H132Z" fill="#17251E" />
+    <path d="M236 650L274 560L312 650H236Z" fill="#17251E" />
+    <path d="M372 640L408 548L444 640H372Z" fill="#17251E" />
+    <path d="M520 654L554 566L588 654H520Z" fill="#17251E" />
+    <path d="M694 646L728 554L762 646H694Z" fill="#17251E" />
+    <path d="M862 648L900 562L938 648H862Z" fill="#17251E" />
+    <path d="M1034 642L1070 550L1106 642H1034Z" fill="#17251E" />
+    <path d="M1192 650L1232 560L1272 650H1192Z" fill="#17251E" />
+    <path d="M1362 642L1402 548L1442 642H1362Z" fill="#17251E" />
+  </g>
+</svg>

@@ -1,0 +1,39 @@
+﻿{
+    "about":  {
+                  "title":  "About us",
+                  "url":  "https://wildbotanix.co.uk/pages/contact",
+                  "body":  "Welcome to Wild Botanix Limited, where nature and wellness come together to create premium self-care and health products. Founded by childhood friends with a shared passion for holistic living, we are committed to crafting high-quality, ethically sourced, and handcrafted solutions for a healthier lifestyle."
+              },
+    "contact":  {
+                    "title":  "Contact information",
+                    "url":  "https://wildbotanix.co.uk/policies/contact-information",
+                    "email":  "info@wildbotanix.health",
+                    "secondaryEmail":  "info@wildbotanix.co.uk",
+                    "phone":  "07707150226",
+                    "hours":  "Monday to Friday, 9 AM to 5 PM",
+                    "instagram":  "@wildbotanixuk",
+                    "facebook":  "@wildbotanixuk",
+                    "tiktok":  "@wild.botanix.uk"
+                },
+    "collections":  [
+                        {
+                            "title":  "Hair and Skin Nourishment Collection",
+                            "handle":  "hair-and-skin-nourishment-collection"
+                        },
+                        {
+                            "title":  "Herbs \u0026 Teas",
+                            "handle":  "herbs-teas"
+                        },
+                        {
+                            "title":  "Home page",
+                            "handle":  "frontpage"
+                        }
+                    ],
+    "blogs":  [
+                  {
+                      "title":  "Liquid Gold",
+                      "handle":  "liquid-gold",
+                      "articleUrl":  "https://wildbotanix.co.uk/blogs/liquid-gold/the-power-of-cold-pressed-batana-oil-natures-secret-for-healthy-hair-and-skin"
+                  }
+              ]
+}

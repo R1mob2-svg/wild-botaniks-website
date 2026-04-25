@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 2800" fill="none">
+  <defs>
+    <linearGradient id="mountainSky" x1="450" y1="0" x2="450" y2="2800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#192420" />
+      <stop offset="0.3" stop-color="#111916" />
+      <stop offset="0.66" stop-color="#0C1310" />
+      <stop offset="1" stop-color="#08110D" />
+    </linearGradient>
+    <radialGradient id="mountainGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(468 316) rotate(90) scale(366 390)">
+      <stop offset="0" stop-color="#A7C6BF" stop-opacity="0.28" />
+      <stop offset="1" stop-color="#A7C6BF" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="mountainMist" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(432 1100) rotate(90) scale(314 530)">
+      <stop offset="0" stop-color="#D0DDD6" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#D0DDD6" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="peakOne" x1="450" y1="366" x2="450" y2="1780" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#26362C" />
+      <stop offset="1" stop-color="#101813" />
+    </linearGradient>
+    <linearGradient id="peakTwo" x1="450" y1="540" x2="450" y2="2080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1B271F" />
+      <stop offset="1" stop-color="#0B120E" />
+    </linearGradient>
+    <linearGradient id="valley" x1="450" y1="1200" x2="450" y2="2800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101713" />
+      <stop offset="1" stop-color="#060A08" />
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="2800" fill="url(#mountainSky)" />
+  <rect width="900" height="2800" fill="url(#mountainGlow)" />
+  <rect width="900" height="2800" fill="url(#mountainMist)" />
+
+  <path d="M0 742L118 594L214 696L346 432L442 594L568 334L714 624L804 512L900 652V2800H0V742Z" fill="url(#peakOne)" opacity="0.9" />
+  <path d="M0 962L116 832L238 930L382 610L492 796L650 520L798 878L900 736V2800H0V962Z" fill="url(#peakTwo)" opacity="0.96" />
+  <path d="M0 1322C74 1230 158 1232 232 1318C294 1390 364 1396 440 1318C512 1242 588 1242 664 1328C730 1402 810 1402 900 1312V2800H0V1322Z" fill="#0E1511" opacity="0.88" />
+  <path d="M0 1608C82 1514 176 1518 254 1606C320 1680 394 1680 470 1606C548 1530 624 1532 702 1614C774 1688 844 1688 900 1628V2800H0V1608Z" fill="#0B120E" opacity="0.92" />
+  <path d="M0 2030C96 1952 180 1962 246 2040C310 2116 390 2118 472 2038C562 1954 648 1960 728 2048C794 2122 850 2120 900 2068V2800H0V2030Z" fill="url(#valley)" />
+
+  <path d="M0 1680H900V1788C822 1840 754 1846 670 1788C590 1732 510 1730 434 1786C352 1844 278 1840 204 1784C130 1728 64 1728 0 1766V1680Z" fill="rgba(190, 208, 203, 0.08)" />
+  <path d="M0 2180H900V2258C828 2310 748 2316 666 2260C588 2208 514 2206 432 2258C348 2314 272 2314 194 2258C114 2204 56 2202 0 2238V2180Z" fill="rgba(215, 225, 215, 0.05)" />
+</svg>
