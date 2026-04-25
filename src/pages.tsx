@@ -82,12 +82,10 @@ export function HomePage() {
       />
 
       <section className="hero">
-        <div
-          className="hero__media"
-          style={{
-            backgroundImage: `linear-gradient(90deg, rgba(8, 16, 13, 0.54) 0%, rgba(8, 16, 13, 0.34) 26%, rgba(8, 16, 13, 0.12) 54%, rgba(8, 16, 13, 0.06) 100%), url(${siteData.brand.heroImage})`,
-          }}
-        />
+        <div className="hero__media-wrapper">
+          <img className="hero__media-img" src={siteData.brand.heroImage} alt="Wild Botanix UK" />
+          <div className="hero__media-overlay" />
+        </div>
 
         <div className="container hero__content">
           <div className="hero__copy">
