@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useRef, useState, type SyntheticEvent } from "react";
 import {
   ArrowRight,
   CheckCircle2,
@@ -972,6 +972,16 @@ export function CollectionDetailPage() {
   }
 
   const collectionProducts = getProductsForCollection(handle);
+  const handleCollectionImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+
+    if (image.dataset.fallbackApplied === "true") {
+      return;
+    }
+
+    image.dataset.fallbackApplied = "true";
+    image.src = siteData.brand.socialImage;
+  };
 
   return (
     <>
@@ -997,7 +1007,7 @@ export function CollectionDetailPage() {
             <p>{collection.heroCopy}</p>
           </div>
           <div className="page-hero__media-card">
-            <img src={collection.image} alt={collection.title} />
+            <img src={collection.image} alt={collection.title} onError={handleCollectionImageError} />
           </div>
         </div>
       </section>
@@ -1043,6 +1053,19 @@ export function ProductPage() {
   const canonicalProductPath = getProductPath(product);
   const selectedVariant =
     product.variants.find((variant) => variant.id === selectedVariantId) ?? product.variants[0];
+  const fallbackProductImage =
+    collections.find((collection) => collection.handle === product.primaryCollection)?.image ??
+    siteData.brand.socialImage;
+  const handleProductImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+
+    if (image.dataset.fallbackApplied === "true") {
+      return;
+    }
+
+    image.dataset.fallbackApplied = "true";
+    image.src = fallbackProductImage;
+  };
   const relatedProducts = products
     .filter(
       (candidate) =>
@@ -1103,7 +1126,11 @@ export function ProductPage() {
         <div className="container product-detail">
           <div className="product-gallery">
             <div className="product-gallery__main">
-              <img src={product.images[selectedImage]} alt={product.cardTitle} />
+              <img
+                src={product.images[selectedImage]}
+                alt={product.cardTitle}
+                onError={handleProductImageError}
+              />
             </div>
             {product.images.length > 1 ? (
               <div className="product-gallery__thumbs">
@@ -1114,7 +1141,11 @@ export function ProductPage() {
                     className={selectedImage === index ? "is-active" : ""}
                     onClick={() => setSelectedImage(index)}
                   >
-                    <img src={image} alt={`${product.cardTitle} ${index + 1}`} />
+                    <img
+                      src={image}
+                      alt={`${product.cardTitle} ${index + 1}`}
+                      onError={handleProductImageError}
+                    />
                   </button>
                 ))}
               </div>

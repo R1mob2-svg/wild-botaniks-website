@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type PropsWithChildren } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PropsWithChildren, type SyntheticEvent } from "react";
 import { ArrowRight, Leaf, Menu, ShoppingBag, User, X } from "lucide-react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
@@ -541,6 +541,20 @@ export function ProductCard({
   const defaultVariant = product.variants[0];
   const cardRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const fallbackImage =
+    collections.find((collection) => collection.handle === product.primaryCollection)?.image ??
+    siteData.brand.socialImage;
+
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+
+    if (image.dataset.fallbackApplied === "true") {
+      return;
+    }
+
+    image.dataset.fallbackApplied = "true";
+    image.src = fallbackImage;
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -587,7 +601,12 @@ export function ProductCard({
       style={{ ["--reveal-delay" as const]: `${Math.min(revealIndex, 7) * 100}ms` } as CSSProperties}
     >
       <Link className="product-card__image-link" to={getProductPath(product)}>
-        <img src={product.images[0]} alt={product.cardTitle} loading="lazy" />
+        <img
+          src={product.images[0]}
+          alt={product.cardTitle}
+          loading={revealIndex < 4 ? "eager" : "lazy"}
+          onError={handleImageError}
+        />
       </Link>
 
       <div className="product-card__body">

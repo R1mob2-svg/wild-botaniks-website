@@ -174,7 +174,7 @@ ul {
 }
 
 .page-shell {
-  padding-top: 5.35rem;
+  padding-top: calc(var(--site-header-offset, 5.35rem) + 0.35rem);
 }
 
 .page-shell--hero-home {
@@ -2318,6 +2318,7 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  min-height: 2.7rem;
   width: fit-content;
   color: rgba(225, 195, 124, 0.98);
   font-weight: 700;
@@ -2521,6 +2522,12 @@ ul {
 
 .product-card__body h3 {
   font-size: 2rem;
+}
+
+.product-card__body h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 .product-card__body p {
@@ -2769,6 +2776,8 @@ ul {
   border-radius: 1rem;
   background: rgba(12, 23, 19, 0.74);
   color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .field textarea {
@@ -2783,9 +2792,19 @@ ul {
 .breadcrumbs {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.4rem;
   color: var(--ink-soft);
   font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.breadcrumbs a,
+.breadcrumbs span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.15rem;
+  padding: 0.2rem 0.3rem;
 }
 
 .section--product {
@@ -2889,6 +2908,16 @@ ul {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.contact-grid .surface a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.55rem;
+  padding-block: 0.25rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
 .contact-layout,
 .cart-layout,
 .checkout-layout {
@@ -2914,6 +2943,10 @@ ul {
 }
 
 .faq-list summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-block: 0.1rem;
   cursor: pointer;
   font-weight: 700;
   color: var(--ink);
@@ -2935,8 +2968,9 @@ ul {
 }
 
 .checkbox-field input {
-  width: 1rem;
-  height: 1rem;
+  flex: 0 0 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .inline-message {
@@ -2995,7 +3029,10 @@ ul {
 }
 
 .text-button {
-  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.3rem;
   border-radius: 0.5rem;
   color: var(--accent-deep);
   font-weight: 700;
@@ -3064,10 +3101,18 @@ ul {
 .footer-column ul {
   display: grid;
   gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .footer-column a {
   color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.45rem;
+  padding-block: 0.2rem;
 }
 
 .site-footer__bottom {
@@ -3176,6 +3221,8 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  min-height: 2.4rem;
+  padding-block: 0.2rem;
   font-weight: 700;
 }
 
@@ -3464,8 +3511,8 @@ ul {
   }
 
   .home-lower-editorial__journal-artwork {
-    right: -2rem;
-    width: min(44vw, 22rem);
+    right: -0.8rem;
+    width: min(38vw, 18rem);
   }
 
   .home-lower-editorial__feature-media {
@@ -3509,11 +3556,22 @@ ul {
   .journal-post-hero__visual {
     min-height: 25rem;
   }
+
+  .page-hero__media-card {
+    min-height: 0;
+  }
+
+  .page-hero__media-card img {
+    height: auto;
+    aspect-ratio: 4 / 3.08;
+    object-fit: cover;
+    object-position: center;
+  }
 }
 
 @media (max-width: 780px) {
   .page-shell {
-    padding-top: 4.9rem;
+    padding-top: calc(var(--site-header-offset, 4.9rem) + 0.35rem);
   }
 
   .page-shell--hero-home {
@@ -3551,6 +3609,13 @@ ul {
   .page-hero.page-hero--about p:not(.eyebrow),
   .page-hero.page-hero--contact p:not(.eyebrow) {
     max-width: 100%;
+  }
+
+  .page-hero h1,
+  .product-summary h1,
+  .journal-hero__copy h1,
+  .journal-post-hero__panel h1 {
+    font-size: clamp(2.5rem, 10.4vw, 3.45rem);
   }
 
   .page-hero--shop::before {
@@ -3748,12 +3813,37 @@ ul {
     flex-direction: column;
   }
 
+  .breadcrumbs {
+    gap: 0.28rem 0.35rem;
+    padding-top: 0.35rem;
+    font-size: 0.84rem;
+  }
+
+  .breadcrumbs a,
+  .breadcrumbs span {
+    min-height: 2.5rem;
+  }
+
   .cart-item {
     grid-template-columns: 1fr;
   }
 
   .product-gallery__thumbs {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .contact-grid .surface a,
+  .footer-column a {
+    min-height: 2.7rem;
+  }
+
+  .footer-column ul {
+    gap: 0.3rem;
+  }
+
+  .checkbox-field input {
+    width: 1.15rem;
+    height: 1.15rem;
   }
 
   .trust-band-section__image {
@@ -4035,9 +4125,9 @@ ul {
 
   .home-lower-editorial__journal-artwork {
     top: auto;
-    right: -2.6rem;
-    bottom: -2.2rem;
-    width: min(58vw, 15rem);
+    right: -0.35rem;
+    bottom: -1.2rem;
+    width: min(42vw, 11rem);
     transform: rotate(-9deg);
   }
 

@@ -1,8 +1,8 @@
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useState, type SyntheticEvent } from "react";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { blogPosts } from "./blogData";
-import { featuredProducts, getProductsForCollection } from "./siteData";
+import { featuredProducts, getProductsForCollection, siteData } from "./siteData";
 import { EmptyState, PageMeta, ProductCard, SectionHeading, Surface } from "./ui";
 import {
   buildArticleSchema,
@@ -89,6 +89,17 @@ function JournalCard({
   post: (typeof blogPosts)[number];
   featured?: boolean;
 }) {
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+
+    if (image.dataset.fallbackApplied === "true") {
+      return;
+    }
+
+    image.dataset.fallbackApplied = "true";
+    image.src = siteData.brand.heroImage;
+  };
+
   return (
     <Link className={`journal-entry ${featured ? "journal-entry--featured" : ""}`.trim()} to={`/journal/${post.slug}`}>
       <div className="journal-entry__body">
@@ -109,6 +120,7 @@ function JournalCard({
             src={post.heroImage}
             alt={post.title}
             loading="lazy"
+            onError={handleImageError}
           />
         </div>
       </div>
@@ -245,6 +257,17 @@ export function JournalPostPage() {
     .filter((candidate) => candidate.category === post.category && candidate.slug !== post.slug)
     .slice(0, 3);
 
+  const handleHeroImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+
+    if (image.dataset.fallbackApplied === "true") {
+      return;
+    }
+
+    image.dataset.fallbackApplied = "true";
+    image.src = siteData.brand.heroImage;
+  };
+
   return (
     <>
       <PageMeta
@@ -299,6 +322,7 @@ export function JournalPostPage() {
                 src={post.heroImage}
                 alt={post.title}
                 loading="lazy"
+                onError={handleHeroImageError}
               />
             </div>
           </div>
