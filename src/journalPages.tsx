@@ -4,6 +4,12 @@ import { Link, useParams } from "react-router-dom";
 import { blogPosts } from "./blogData";
 import { featuredProducts, getProductsForCollection } from "./siteData";
 import { EmptyState, PageMeta, ProductCard, SectionHeading, Surface } from "./ui";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  buildJournalHubSchema,
+  buildWebPageSchema,
+} from "./seo";
 
 type JournalDestination = {
   eyebrow: string;
@@ -134,23 +140,24 @@ export function JournalPage() {
       <PageMeta
         title="Journal"
         description="Explore 20 Wild Botanix journal articles covering herbal teas, sea moss, batana oil, botanical haircare and premium natural self-care rituals."
+        image={blogPosts[0]?.heroImage}
+        schema={buildJournalHubSchema()}
       />
 
       <section className="page-hero page-hero--journal">
         <div className="container journal-hero">
           <div className="journal-hero__copy">
             <p className="eyebrow">Wild Botanix Journal</p>
-            <h1>Editorial content that supports the shop with real botanical depth.</h1>
+            <h1>Journal stories for calmer, better-chosen rituals.</h1>
             <p>
               Explore tea rituals, sea moss guidance, haircare notes and botanical self-care
-              stories arranged in a calmer editorial space that supports browsing without crowding
-              the shop.
+              stories that make choosing the right products feel easier and more informed.
             </p>
 
             <div className="hero__highlights journal-hero__stats">
               <span className="hero-chip">20 articles</span>
-              <span className="hero-chip">{journalThemeCount} editorial themes</span>
-              <span className="hero-chip">Shop-connected storytelling</span>
+              <span className="hero-chip">{journalThemeCount} ritual topics</span>
+              <span className="hero-chip">Tea, sea moss & self-care</span>
             </div>
           </div>
 
@@ -197,7 +204,7 @@ export function JournalPage() {
           ) : (
             <EmptyState
               title="No journal articles match that search"
-              body="Try another keyword or switch categories to explore the Wild Botanix editorial archive."
+              body="Try another keyword or browse a different topic to find the right ritual guide."
               cta={{ label: "View all journal posts", href: "/journal" }}
             />
           )}
@@ -217,12 +224,13 @@ export function JournalPostPage() {
         <PageMeta
           title="Journal Post Not Found"
           description="The Wild Botanix journal article you were looking for could not be found."
+          noindex
         />
         <section className="section">
           <div className="container">
             <EmptyState
               title="That journal article does not exist"
-              body="Head back to the journal hub to keep exploring the Wild Botanix editorial archive."
+              body="Head back to the journal hub to keep exploring Wild Botanix ritual guides and ingredient notes."
               cta={{ label: "Go to journal", href: "/journal" }}
             />
           </div>
@@ -239,7 +247,27 @@ export function JournalPostPage() {
 
   return (
     <>
-      <PageMeta title={post.title} description={post.excerpt} />
+      <PageMeta
+        title={post.title}
+        description={post.excerpt}
+        canonicalPath={`/journal/${post.slug}`}
+        image={post.heroImage}
+        openGraphType="article"
+        schema={[
+          buildWebPageSchema({
+            path: `/journal/${post.slug}`,
+            title: post.title,
+            description: post.excerpt,
+            image: post.heroImage,
+          }),
+          buildArticleSchema(post),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Journal", path: "/journal" },
+            { name: post.title, path: `/journal/${post.slug}` },
+          ]),
+        ]}
+      />
 
       <section className="section section--tight">
         <div className="container breadcrumbs">
@@ -305,8 +333,8 @@ export function JournalPostPage() {
             <Surface>
               <h2>Why this matters</h2>
               <p>
-                The journal is designed to support product discovery in a calmer, more premium way,
-                giving Wild Botanix a stronger editorial layer than the live store currently has.
+                Each article is here to make choosing products and building daily rituals feel
+                easier, calmer and more informed.
               </p>
             </Surface>
           </aside>
@@ -318,7 +346,7 @@ export function JournalPostPage() {
           <SectionHeading
             eyebrow="Shop the edit"
             title="Products connected to this ritual"
-            body="The journal does not sit apart from the storefront. It leads customers back into relevant products and collections with cleaner intent."
+            body="Useful reads should lead naturally to the teas, oils and self-care staples they mention."
           />
           <div className="product-grid">
             {shopEdit.map((product) => (
@@ -333,8 +361,8 @@ export function JournalPostPage() {
           <div className="container">
             <SectionHeading
               eyebrow="Continue reading"
-              title="More from this editorial theme"
-              body="Related Wild Botanix journal pieces keep the storytelling structured and easy to explore."
+              title="More from this ritual theme"
+              body="Explore more Wild Botanix journal pieces that build on the same ingredients, routines and everyday moments."
             />
             <div className="journal-grid">
               {relatedPosts.map((relatedPost) => (

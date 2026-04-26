@@ -10,7 +10,7 @@ export type BlogPost = {
   cta: string;
 };
 
-const heroReference = "/branding/wild-botaniks-hero-reference.png";
+const heroReference = "/branding/wild-botaniks-hero-reference.webp";
 const teaHero = "https://cdn.shopify.com/s/files/1/0860/1695/0537/files/rn-image_picker_lib_temp_6c8d9873-93b3-4495-acfb-01460391bb11.png?v=1775779097";
 const teaHeroAlt = "https://cdn.shopify.com/s/files/1/0860/1695/0537/files/rn-image_picker_lib_temp_dd60dddb-c721-4f4d-a5b5-26d6499bbd9b.png?v=1775779098";
 const seaMossHero = "https://cdn.shopify.com/s/files/1/0860/1695/0537/files/rn-image_picker_lib_temp_781c824b-774d-4aa8-a3a8-25fbf0cba61d.png?v=1776266865";

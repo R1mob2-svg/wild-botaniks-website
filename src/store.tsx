@@ -145,7 +145,7 @@ export function StoreProvider({ children }: PropsWithChildren) {
 
   const register: StoreContextValue["register"] = (payload) => {
     if (customer?.email.toLowerCase() === payload.email.toLowerCase()) {
-      return { ok: false, message: "This email is already registered in the demo account area." };
+      return { ok: false, message: "This email is already linked to an account. Try signing in instead." };
     }
 
     const nextCustomer: Customer = {
@@ -160,11 +160,11 @@ export function StoreProvider({ children }: PropsWithChildren) {
 
   const signIn: StoreContextValue["signIn"] = (email, password) => {
     if (!customer) {
-      return { ok: false, message: "No demo account exists yet. Create one to continue." };
+      return { ok: false, message: "No account matches those details yet. Create one to continue." };
     }
 
     if (customer.email.toLowerCase() !== email.toLowerCase() || customer.password !== password) {
-      return { ok: false, message: "Those credentials do not match the saved demo account." };
+      return { ok: false, message: "Those details do not match your account. Please try again." };
     }
 
     setCustomer({ ...customer });
@@ -190,7 +190,7 @@ export function StoreProvider({ children }: PropsWithChildren) {
       placedAt: new Date().toISOString(),
       total: subtotal,
       items: cartItems,
-      status: "Checkout handoff ready",
+      status: "Order received",
       shippingAddress,
     };
 
