@@ -2,8 +2,14 @@ import { useDeferredValue, useState, type SyntheticEvent } from "react";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { blogPosts } from "./blogData";
-import { featuredProducts, getProductsForCollection, siteData } from "./siteData";
-import { EmptyState, PageMeta, ProductCard, SectionHeading, Surface } from "./ui";
+import {
+  featuredProducts,
+  getOfficialStoreCollectionUrl,
+  getOfficialStoreShopUrl,
+  getProductsForCollection,
+  siteData,
+} from "./siteData";
+import { ActionLink, EmptyState, PageMeta, ProductCard, SectionHeading, Surface } from "./ui";
 import {
   buildArticleSchema,
   buildBreadcrumbSchema,
@@ -25,43 +31,43 @@ const journalCategoryDestinations: Record<string, JournalDestination> = {
   "Tea Rituals": {
     eyebrow: "Herbal tea rituals",
     label: "Shop herbal teas",
-    href: "/collections/herbal-teas",
+    href: getOfficialStoreCollectionUrl("herbal-teas"),
     collectionHandle: "herbal-teas",
   },
   "Sea Moss": {
     eyebrow: "Mineral wellness",
     label: "Shop sea moss",
-    href: "/collections/mineral-wellness",
+    href: getOfficialStoreCollectionUrl("mineral-wellness"),
     collectionHandle: "mineral-wellness",
   },
   "Oils and Rituals": {
     eyebrow: "Botanical oils",
     label: "Shop botanical oils",
-    href: "/collections/botanical-oils",
+    href: getOfficialStoreCollectionUrl("botanical-oils"),
     collectionHandle: "botanical-oils",
   },
   "Hair and Scalp Care": {
     eyebrow: "Hair and scalp care",
     label: "Shop hair and scalp care",
-    href: "/collections/hair-scalp-care",
+    href: getOfficialStoreCollectionUrl("hair-scalp-care"),
     collectionHandle: "hair-scalp-care",
   },
   "Hair and Skin Care": {
     eyebrow: "Daily self-care",
     label: "Shop natural self-care",
-    href: "/collections/natural-self-care",
+    href: getOfficialStoreCollectionUrl("natural-self-care"),
     collectionHandle: "natural-self-care",
   },
   "Natural Self-Care": {
     eyebrow: "Natural self-care",
     label: "Shop natural self-care",
-    href: "/collections/natural-self-care",
+    href: getOfficialStoreCollectionUrl("natural-self-care"),
     collectionHandle: "natural-self-care",
   },
   "Brand and Rituals": {
     eyebrow: "Wild Botanix edit",
     label: "Shop the full collection",
-    href: "/shop",
+    href: getOfficialStoreShopUrl(),
   },
 };
 
@@ -69,7 +75,7 @@ const getJournalDestination = (category: string) =>
   journalCategoryDestinations[category] ?? {
     eyebrow: "Wild Botanix edit",
     label: "Shop the full collection",
-    href: "/shop",
+    href: getOfficialStoreShopUrl(),
   };
 
 const getJournalEditProducts = (category: string) => {
@@ -349,9 +355,9 @@ export function JournalPostPage() {
               <p className="eyebrow">{destination.eyebrow}</p>
               <h2>Take the next step from story to shop.</h2>
               <p>{post.cta}</p>
-              <Link className="button" to={destination.href}>
+              <ActionLink className="button" href={destination.href}>
                 {destination.label} <ArrowRight size={16} />
-              </Link>
+              </ActionLink>
             </Surface>
 
             <Surface>

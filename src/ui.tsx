@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState, type CSSProperties, type PropsWithChildren, type SyntheticEvent } from "react";
-import { ArrowRight, Leaf, Menu, ShoppingBag, User, X } from "lucide-react";
+import { ArrowRight, Leaf, Menu, X } from "lucide-react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   collections,
   formatCurrency,
+  getOfficialStoreCollectionUrl,
+  getOfficialStoreCollectionsUrl,
+  getOfficialStoreAccountUrl,
+  getOfficialStoreProductUrl,
+  getOfficialStoreSecureStoreUrl,
+  getOfficialStoreShopUrl,
   getProductPath,
   siteData,
   type Collection,
@@ -19,7 +25,6 @@ import {
   toAbsoluteUrl,
   type SchemaNode,
 } from "./seo";
-import { useStore } from "./store";
 
 export function PageMeta({
   title,
@@ -194,17 +199,43 @@ export function Layout() {
   );
 }
 
+const absoluteUrlPattern = /^https?:\/\//i;
+
+const isExternalHref = (href: string) => absoluteUrlPattern.test(href);
+
+export function ActionLink({
+  className,
+  href,
+  children,
+  onClick,
+  ariaLabel,
+}: PropsWithChildren<{
+  className?: string;
+  href: string;
+  onClick?: () => void;
+  ariaLabel?: string;
+}>) {
+  if (isExternalHref(href)) {
+    return (
+      <a className={className} href={href} rel="noopener noreferrer" onClick={onClick} aria-label={ariaLabel}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link className={className} to={href} onClick={onClick} aria-label={ariaLabel}>
+      {children}
+    </Link>
+  );
+}
+
 function Header({ isHeroRoute }: { isHeroRoute: boolean }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(() => !isHeroRoute);
   const headerRef = useRef<HTMLElement | null>(null);
-  const { cartCount, customer } = useStore();
   const isSolid = !isHeroRoute || isScrolled || menuOpen;
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -319,23 +350,26 @@ function Header({ isHeroRoute }: { isHeroRoute: boolean }) {
             <NavLink to="/" end>
               Home
             </NavLink>
-            <NavLink to="/shop">Shop</NavLink>
-            <NavLink to="/collections">Collections</NavLink>
+            <a href={getOfficialStoreShopUrl()} rel="noopener noreferrer">
+              Shop
+            </a>
+            <a href={getOfficialStoreCollectionsUrl()} rel="noopener noreferrer">
+              View range
+            </a>
             <NavLink to="/journal">Journal</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </nav>
 
           <div className="site-header__actions">
-            <Link className="icon-link" to="/account" aria-label="Account">
-              <User size={18} />
-              <span>{customer ? "Account" : "Sign in"}</span>
-            </Link>
-            <Link className="cart-link" to="/cart" aria-label="Cart">
-              <ShoppingBag size={18} />
-              <span>Cart</span>
-              {cartCount > 0 ? <strong>{cartCount}</strong> : null}
-            </Link>
+            <a
+              className="cart-link"
+              href={getOfficialStoreSecureStoreUrl()}
+              rel="noopener noreferrer"
+              aria-label="Official store"
+            >
+              <span>Official store</span>
+            </a>
             <button
               className="menu-toggle"
               type="button"
@@ -352,12 +386,16 @@ function Header({ isHeroRoute }: { isHeroRoute: boolean }) {
           <NavLink to="/" end onClick={() => setMenuOpen(false)}>
             Home
           </NavLink>
-          <NavLink to="/shop" onClick={() => setMenuOpen(false)}>
-            Shop
-          </NavLink>
-          <NavLink to="/collections" onClick={() => setMenuOpen(false)}>
-            Collections
-          </NavLink>
+          <a href={getOfficialStoreShopUrl()} rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>
+            Shop securely
+          </a>
+          <a
+            href={getOfficialStoreCollectionsUrl()}
+            rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
+          >
+            View full range
+          </a>
           <NavLink to="/journal" onClick={() => setMenuOpen(false)}>
             Journal
           </NavLink>
@@ -367,12 +405,9 @@ function Header({ isHeroRoute }: { isHeroRoute: boolean }) {
           <NavLink to="/contact" onClick={() => setMenuOpen(false)}>
             Contact
           </NavLink>
-          <NavLink to="/account" onClick={() => setMenuOpen(false)}>
-            {customer ? "Account" : "Sign in"}
-          </NavLink>
-          <NavLink to="/cart" onClick={() => setMenuOpen(false)}>
-            Cart {cartCount > 0 ? `(${cartCount})` : ""}
-          </NavLink>
+          <a href={getOfficialStoreSecureStoreUrl()} rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>
+            Continue to our secure store
+          </a>
         </div>
       </div>
     </header>
@@ -392,7 +427,7 @@ function FooterColumn({
       <ul>
         {links.map((link) => (
           <li key={link.href}>
-            <Link to={link.href}>{link.label}</Link>
+            <ActionLink href={link.href}>{link.label}</ActionLink>
           </li>
         ))}
       </ul>
@@ -410,9 +445,9 @@ function Footer() {
           <p className="eyebrow">Begin your wellness journey</p>
           <h2>Plant-led wellness for calmer daily rituals.</h2>
         </div>
-        <Link className="button button--ghost" to="/shop">
-          Shop the collection <ArrowRight size={16} />
-        </Link>
+        <ActionLink className="button button--ghost" href={getOfficialStoreShopUrl()}>
+          Shop securely through our official store <ArrowRight size={16} />
+        </ActionLink>
       </div>
 
       <div className="container site-footer__grid">
@@ -427,10 +462,10 @@ function Footer() {
         <FooterColumn
           title="Shop"
           links={[
-            { label: "All products", href: "/shop" },
+            { label: "Official store", href: getOfficialStoreShopUrl() },
             ...collections.slice(0, 4).map((collection) => ({
               label: collection.title,
-              href: `/collections/${collection.handle}`,
+              href: getOfficialStoreCollectionUrl(collection.handle),
             })),
           ]}
         />
@@ -441,8 +476,8 @@ function Footer() {
             { label: "About Us", href: "/about" },
             { label: "Journal", href: "/journal" },
             { label: "Contact", href: "/contact" },
-            { label: "Account", href: "/account" },
-            { label: "Cart", href: "/cart" },
+            { label: "Secure store", href: getOfficialStoreSecureStoreUrl() },
+            { label: "Official account", href: getOfficialStoreAccountUrl() },
           ]}
         />
 
@@ -493,13 +528,13 @@ export function Surface({
 
 export function CollectionCard({ collection }: { collection: Collection }) {
   return (
-    <Link className="collection-card" to={`/collections/${collection.handle}`}>
+    <ActionLink className="collection-card" href={getOfficialStoreCollectionUrl(collection.handle)}>
       <div className="collection-card__body">
         <p className="eyebrow">{collection.eyebrow}</p>
         <h3>{collection.title}</h3>
         <p>{collection.description}</p>
         <span>
-          Shop {collection.title} <ArrowRight size={16} />
+          View the full product range <ArrowRight size={16} />
         </span>
       </div>
 
@@ -508,7 +543,7 @@ export function CollectionCard({ collection }: { collection: Collection }) {
           <img src={collection.image} alt={collection.title} loading="lazy" />
         </div>
       </div>
-    </Link>
+    </ActionLink>
   );
 }
 
@@ -536,11 +571,17 @@ export function ProductCard({
   product: Product;
   revealIndex?: number;
 }) {
-  const { addToCart } = useStore();
-  const hasVariantChoice = product.variants.length > 1;
-  const defaultVariant = product.variants[0];
   const cardRef = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      typeof IntersectionObserver === "undefined"
+    );
+  });
   const fallbackImage =
     collections.find((collection) => collection.handle === product.primaryCollection)?.image ??
     siteData.brand.socialImage;
@@ -564,7 +605,6 @@ export function ProductCard({
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     if (mediaQuery.matches || typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
       return;
     }
 
@@ -631,14 +671,15 @@ export function ProductCard({
         </div>
 
         <div className="product-card__actions">
-          <Link className="button button--ghost" to={getProductPath(product)}>
-            {hasVariantChoice ? "Choose options" : "View product"}
-          </Link>
-          {!hasVariantChoice && product.available ? (
-            <button className="button" type="button" onClick={() => addToCart(product, defaultVariant, 1)}>
-              Add to cart
-            </button>
-          ) : null}
+          <ActionLink
+            className="button button--ghost"
+            href={getOfficialStoreCollectionUrl(product.primaryCollection)}
+          >
+            View the full product range
+          </ActionLink>
+          <ActionLink className="button" href={getOfficialStoreProductUrl(product)}>
+            {product.available ? "Continue to our secure store" : "View on the official store"}
+          </ActionLink>
         </div>
       </div>
     </article>
@@ -659,7 +700,7 @@ export function EmptyState({
       <Leaf size={26} />
       <h2>{title}</h2>
       <p>{body}</p>
-      {cta ? <Link className="button" to={cta.href}>{cta.label}</Link> : null}
+      {cta ? <ActionLink className="button" href={cta.href}>{cta.label}</ActionLink> : null}
     </Surface>
   );
 }

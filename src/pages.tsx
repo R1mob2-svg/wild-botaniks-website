@@ -26,6 +26,12 @@ import {
   forestEditorialFeatureGroups,
   formatCurrency,
   getCollectionByHandle,
+  getOfficialStoreAccountUrl,
+  getOfficialStoreCollectionUrl,
+  getOfficialStoreCollectionsUrl,
+  getOfficialStoreProductUrl,
+  getOfficialStoreSecureStoreUrl,
+  getOfficialStoreShopUrl,
   getProductByHandle,
   getProductPath,
   getProductsForCollection,
@@ -38,14 +44,13 @@ import {
   type ForestEditorialIconKey,
   type Product,
 } from "./siteData";
-import { useStore } from "./store";
 import {
+  ActionLink,
   CollectionCard,
   EmptyState,
   PageMeta,
   PriceStack,
   ProductCard,
-  QuantityControl,
   SectionHeading,
   Surface,
 } from "./ui";
@@ -106,13 +111,6 @@ const forestEditorialLowerBenefits = [
     body: "Self-care essentials that feel good and support your daily rituals.",
   },
 ];
-
-const formatDate = (value: string) =>
-  new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(value));
 
 const sortProducts = (items: Product[], sort: string) => {
   const copy = [...items];
@@ -282,10 +280,10 @@ function ForestParallaxSection() {
             botanical self-care and soothing plant-led blends, Wild Botanix brings gentle wellness
             into morning starts, evening wind-downs and everyday routines.
           </p>
-          <Link className="wild-botanix-inline-cta" to="/collections">
+          <ActionLink className="wild-botanix-inline-cta" href={getOfficialStoreCollectionsUrl()}>
             <span>Explore botanical rituals</span>
             <ArrowRight size={18} />
-          </Link>
+          </ActionLink>
         </div>
 
         <div className="wild-botanix-feature-groups">
@@ -546,21 +544,55 @@ const ribbonItems = [
 
 const lowerHomeTrustColumns = [
   {
-    title: "Your account, your way",
-    body: "Create an account, sign in, and manage your details and delivery preferences with ease.",
+    title: "Official store accounts",
+    body: "Sign in and manage your orders through the official Wild Botanix Shopify store.",
     icon: UserRound,
   },
   {
-    title: "Seamless from cart to door",
-    body: "A clean, effortless checkout and smooth delivery - so your ritual arrives without the clutter.",
+    title: "Secure ordering",
+    body: "Stock, checkout and order updates are handled through the official store for a smoother purchase path.",
     icon: Truck,
   },
   {
-    title: "Secure, always",
-    body: "Trusted payments and privacy protection - because your wellness deserves peace of mind.",
+    title: "Trusted payments",
+    body: "Orders move through the official Wild Botanix Shopify store with live payments and customer records.",
     icon: ShieldCheck,
   },
 ] as const;
+
+function StoreHandoffCard({
+  eyebrow,
+  title,
+  body,
+  primaryHref = getOfficialStoreSecureStoreUrl(),
+  primaryLabel = "Continue to our secure store",
+  secondaryHref = getOfficialStoreShopUrl(),
+  secondaryLabel = "View the full product range",
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+}) {
+  return (
+    <Surface className="cart-summary">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p>{body}</p>
+      <div className="product-summary__actions">
+        <ActionLink className="button" href={primaryHref}>
+          {primaryLabel}
+        </ActionLink>
+        <ActionLink className="button button--ghost" href={secondaryHref}>
+          {secondaryLabel}
+        </ActionLink>
+      </div>
+    </Surface>
+  );
+}
 
 function CategoryRibbon() {
   return (
@@ -693,9 +725,9 @@ export function HomePage() {
               </p>
 
               <div className="hero__actions">
-                <Link className="button" to="/shop">
-                  Shop botanical rituals <ArrowRight size={16} />
-                </Link>
+                <ActionLink className="button" href={getOfficialStoreShopUrl()}>
+                  Shop securely through our official store <ArrowRight size={16} />
+                </ActionLink>
                 <Link className="button button--ghost hero__brand-link" to="/about">
                   Learn about Wild Botanix
                 </Link>
@@ -749,9 +781,9 @@ export function HomePage() {
                 From a morning tea to a richer scalp oil or a spoonful of sea moss, Wild Botanix
                 is made for routines that feel calm, useful and easy to keep.
               </p>
-              <Link className="button button--ghost" to="/collections/herbal-teas">
-                Explore tea rituals
-              </Link>
+              <ActionLink className="button button--ghost" href={getOfficialStoreCollectionUrl("herbal-teas")}>
+                View the full product range
+              </ActionLink>
             </div>
 
             <div className="ritual-cards">
@@ -846,6 +878,11 @@ export function ShopPage() {
             Browse herbal teas, sea moss, batana oil, scalp care and everyday self-care in one
             calm, easy-to-shop space.
           </p>
+          <div className="hero__actions">
+            <ActionLink className="button" href={getOfficialStoreShopUrl()}>
+              Shop securely through our official store
+            </ActionLink>
+          </div>
         </div>
       </section>
 
@@ -949,6 +986,11 @@ export function CollectionsPage() {
             Shop by what fits your routine, from herbal teas and mineral wellness to nourishing
             oils and natural self-care.
           </p>
+          <div className="hero__actions">
+            <ActionLink className="button" href={getOfficialStoreCollectionsUrl()}>
+              View the full product range
+            </ActionLink>
+          </div>
         </div>
       </section>
 
@@ -1005,6 +1047,11 @@ export function CollectionDetailPage() {
             <p className="eyebrow">{collection.eyebrow}</p>
             <h1>{collection.heroHeading}</h1>
             <p>{collection.heroCopy}</p>
+            <div className="hero__actions">
+              <ActionLink className="button" href={getOfficialStoreCollectionUrl(collection.handle)}>
+                Continue to our secure store
+              </ActionLink>
+            </div>
           </div>
           <div className="page-hero__media-card">
             <img src={collection.image} alt={collection.title} onError={handleCollectionImageError} />
@@ -1023,32 +1070,11 @@ export function CollectionDetailPage() {
   );
 }
 
-export function ProductPage() {
-  const { handle = "" } = useParams();
-  const navigate = useNavigate();
-  const { addToCart } = useStore();
-  const product = getProductByHandle(handle);
+function ProductPageView({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
-  const [quantity, setQuantity] = useState(1);
-
-  useEffect(() => {
-    setSelectedImage(0);
-    setQuantity(1);
-    setSelectedVariantId(product?.variants[0]?.id ?? null);
-  }, [product]);
-
-  useEffect(() => {
-    if (!product || handle === product.slug) {
-      return;
-    }
-
-    navigate(getProductPath(product), { replace: true });
-  }, [handle, navigate, product]);
-
-  if (!product) {
-    return <NotFoundPage />;
-  }
+  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
+    product.variants[0]?.id ?? null,
+  );
 
   const canonicalProductPath = getProductPath(product);
   const selectedVariant =
@@ -1075,8 +1101,7 @@ export function ProductPage() {
         ),
     )
     .slice(0, 4);
-
-  const handleAddToCart = () => addToCart(product, selectedVariant, quantity);
+  const officialProductUrl = getOfficialStoreProductUrl(product);
 
   return (
     <>
@@ -1111,7 +1136,9 @@ export function ProductPage() {
         <div className="container breadcrumbs">
           <Link to="/">Home</Link>
           <ChevronRight size={14} />
-          <Link to="/shop">Shop</Link>
+          <a href={getOfficialStoreShopUrl()} rel="noopener noreferrer">
+            Shop
+          </a>
           <ChevronRight size={14} />
           <Link to={`/collections/${product.primaryCollection}`}>
             {collections.find((collection) => collection.handle === product.primaryCollection)?.title ??
@@ -1188,21 +1215,12 @@ export function ProductPage() {
             ) : null}
 
             <div className="product-summary__actions">
-              <QuantityControl value={quantity} onChange={setQuantity} />
-              <button className="button" type="button" disabled={!product.available} onClick={handleAddToCart}>
-                {product.available ? "Add to cart" : "Sold out"}
-              </button>
-              <button
-                className="button button--ghost"
-                type="button"
-                disabled={!product.available}
-                onClick={() => {
-                  handleAddToCart();
-                  navigate("/checkout");
-                }}
-              >
-                Buy now
-              </button>
+              <ActionLink className="button" href={officialProductUrl}>
+                {product.available ? "Continue to our secure store" : "View on the official store"}
+              </ActionLink>
+              <ActionLink className="button button--ghost" href={getOfficialStoreShopUrl()}>
+                View the full product range
+              </ActionLink>
             </div>
 
             <Surface className="product-summary__trust">
@@ -1212,7 +1230,7 @@ export function ProductPage() {
               </div>
               <div>
                 <ShieldCheck size={18} />
-                <span>Easy basket and checkout flow</span>
+                <span>Orders are handled through our official Shopify store</span>
               </div>
             </Surface>
           </div>
@@ -1264,6 +1282,26 @@ export function ProductPage() {
       </section>
     </>
   );
+}
+
+export function ProductPage() {
+  const { handle = "" } = useParams();
+  const navigate = useNavigate();
+  const product = getProductByHandle(handle);
+
+  useEffect(() => {
+    if (!product || handle === product.slug) {
+      return;
+    }
+
+    navigate(getProductPath(product), { replace: true });
+  }, [handle, navigate, product]);
+
+  if (!product) {
+    return <NotFoundPage />;
+  }
+
+  return <ProductPageView key={product.handle} product={product} />;
 }
 
 export function AboutPage() {
@@ -1463,284 +1501,45 @@ export function ContactPage() {
 }
 
 export function AccountPage() {
-  const { customer, register, saveAddress, signIn, signOut, updateCustomer } = useStore();
-  const [message, setMessage] = useState("");
-
-  if (customer) {
-    return (
-      <>
-        <PageMeta
-          title="Account"
-          description="Manage your Wild Botanix account, saved address and recent order details."
-          noindex
-        />
-        <section className="page-hero">
-          <div className="container">
-            <p className="eyebrow">Account</p>
-            <h1>Welcome back, {customer.firstName}.</h1>
-            <p>
-              Manage your details, saved delivery address and recent orders in one place.
-            </p>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container account-grid">
-            <Surface>
-              <h2>Account preview</h2>
-              <p>
-                This account area is currently a local-device preview. Saved details and order
-                history shown here stay in this browser only and are not connected to a live
-                customer system yet.
-              </p>
-            </Surface>
-
-            <Surface>
-              <h2>Profile</h2>
-              <form
-                className="form-grid"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const formData = new FormData(event.currentTarget);
-                  updateCustomer({
-                    firstName: String(formData.get("firstName") ?? customer.firstName),
-                    lastName: String(formData.get("lastName") ?? customer.lastName),
-                    phone: String(formData.get("phone") ?? customer.phone),
-                    marketingOptIn: formData.get("marketing") === "on",
-                  });
-                  setMessage("Account details updated.");
-                }}
-              >
-                <label className="field">
-                  <span>First name</span>
-                  <input defaultValue={customer.firstName} name="firstName" />
-                </label>
-                <label className="field">
-                  <span>Last name</span>
-                  <input defaultValue={customer.lastName} name="lastName" />
-                </label>
-                <label className="field">
-                  <span>Email</span>
-                  <input defaultValue={customer.email} disabled />
-                </label>
-                <label className="field">
-                  <span>Phone</span>
-                  <input defaultValue={customer.phone} name="phone" />
-                </label>
-                <label className="checkbox-field field--full">
-                  <input defaultChecked={customer.marketingOptIn} name="marketing" type="checkbox" />
-                  <span>Receive updates and launch offers</span>
-                </label>
-                <div className="button-row">
-                  <button className="button" type="submit">
-                    Save changes
-                  </button>
-                  <button className="button button--ghost" type="button" onClick={signOut}>
-                    Sign out
-                  </button>
-                </div>
-              </form>
-            </Surface>
-
-            <Surface>
-              <h2>Saved delivery details</h2>
-              <form
-                className="form-grid"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const formData = new FormData(event.currentTarget);
-                  saveAddress({
-                    label: String(formData.get("label") ?? "Home"),
-                    firstName: customer.firstName,
-                    lastName: customer.lastName,
-                    line1: String(formData.get("line1") ?? ""),
-                    line2: String(formData.get("line2") ?? ""),
-                    city: String(formData.get("city") ?? ""),
-                    postcode: String(formData.get("postcode") ?? ""),
-                    country: String(formData.get("country") ?? "United Kingdom"),
-                  });
-                  setMessage("Saved delivery details updated.");
-                }}
-              >
-                <label className="field">
-                  <span>Address label</span>
-                  <input defaultValue={customer.savedAddress?.label ?? "Home"} name="label" />
-                </label>
-                <label className="field">
-                  <span>Address line 1</span>
-                  <input defaultValue={customer.savedAddress?.line1 ?? ""} name="line1" />
-                </label>
-                <label className="field">
-                  <span>Address line 2</span>
-                  <input defaultValue={customer.savedAddress?.line2 ?? ""} name="line2" />
-                </label>
-                <label className="field">
-                  <span>Town / city</span>
-                  <input defaultValue={customer.savedAddress?.city ?? ""} name="city" />
-                </label>
-                <label className="field">
-                  <span>Postcode</span>
-                  <input defaultValue={customer.savedAddress?.postcode ?? ""} name="postcode" />
-                </label>
-                <label className="field">
-                  <span>Country</span>
-                  <input defaultValue={customer.savedAddress?.country ?? "United Kingdom"} name="country" />
-                </label>
-                <button className="button" type="submit">
-                  Save address
-                </button>
-              </form>
-            </Surface>
-          </div>
-
-          <div className="container">
-            {message ? <p className="inline-message">{message}</p> : null}
-          </div>
-        </section>
-
-        <section className="section section--mist">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Orders"
-              title="Recent orders"
-              body="See your latest Wild Botanix purchases and keep your delivery details close to hand."
-            />
-            {customer.orders.length > 0 ? (
-              <div className="account-orders">
-                {customer.orders.map((order) => (
-                  <Surface key={order.id}>
-                    <div className="order-card__top">
-                      <div>
-                        <p className="eyebrow">{order.id}</p>
-                        <h3>{formatDate(order.placedAt)}</h3>
-                      </div>
-                      <strong>{order.status}</strong>
-                    </div>
-                    <p>{order.items.length} item(s)</p>
-                    <PriceStack price={order.total} compareAt={null} compact />
-                  </Surface>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No orders yet"
-                body="When you place an order, it will appear here for easy reference."
-                cta={{ label: "Go to shop", href: "/shop" }}
-              />
-            )}
-          </div>
-        </section>
-      </>
-    );
-  }
-
   return (
     <>
       <PageMeta
         title="Account"
-        description="Create a Wild Botanix account or sign in to manage saved details and orders."
+        description="Customer accounts and order history are handled through the official Wild Botanix Shopify store."
         noindex
       />
       <section className="page-hero">
         <div className="container">
           <p className="eyebrow">Account</p>
-          <h1>Your Wild Botanix account, all in one place.</h1>
+          <h1>Orders are handled through our official Shopify store.</h1>
           <p>
-            Sign in to save your details, keep checkout simple and look back on past orders whenever
-            you need to.
+            Sign in securely through the official Wild Botanix store to review orders, manage your
+            details and continue shopping.
           </p>
         </div>
       </section>
 
       <section className="section">
         <div className="container auth-grid">
+          <StoreHandoffCard
+            eyebrow="Official store access"
+            title="Continue to your secure customer account."
+            body="Order history, saved details, payments and customer logins live in the official Wild Botanix Shopify store."
+            primaryHref={getOfficialStoreAccountUrl()}
+            primaryLabel="Continue to our secure store"
+          />
+
           <Surface>
-            <h2>Account preview</h2>
+            <h2>What happens next</h2>
             <p>
-              This sign-in and account area is currently a local-device preview. Details entered
-              here are not connected to a live customer database or email login system yet.
+              Use the official store to sign in, create an account, review past orders and manage
+              delivery details in the live customer system.
+            </p>
+            <p>
+              This website remains the brand and content front-end, while orders and customer data
+              stay in Shopify.
             </p>
           </Surface>
-
-          <Surface>
-            <h2>Sign in</h2>
-            <form
-              className="form-grid"
-              onSubmit={(event) => {
-                event.preventDefault();
-                const formData = new FormData(event.currentTarget);
-                const response = signIn(
-                  String(formData.get("email") ?? ""),
-                  String(formData.get("password") ?? ""),
-                );
-                setMessage(response.message);
-              }}
-            >
-              <label className="field">
-                <span>Email</span>
-                <input name="email" type="email" required placeholder="you@example.com" />
-              </label>
-              <label className="field">
-                <span>Password</span>
-                <input name="password" type="password" required placeholder="Enter your password" />
-              </label>
-              <button className="button" type="submit">
-                Sign in
-              </button>
-            </form>
-          </Surface>
-
-          <Surface>
-            <h2>Create account</h2>
-            <form
-              className="form-grid"
-              onSubmit={(event) => {
-                event.preventDefault();
-                const formData = new FormData(event.currentTarget);
-                const response = register({
-                  firstName: String(formData.get("firstName") ?? ""),
-                  lastName: String(formData.get("lastName") ?? ""),
-                  email: String(formData.get("email") ?? ""),
-                  phone: String(formData.get("phone") ?? ""),
-                  password: String(formData.get("password") ?? ""),
-                  marketingOptIn: formData.get("marketing") === "on",
-                });
-                setMessage(response.message);
-              }}
-            >
-              <label className="field">
-                <span>First name</span>
-                <input name="firstName" required />
-              </label>
-              <label className="field">
-                <span>Last name</span>
-                <input name="lastName" required />
-              </label>
-              <label className="field">
-                <span>Email</span>
-                <input name="email" type="email" required />
-              </label>
-              <label className="field">
-                <span>Phone</span>
-                <input name="phone" />
-              </label>
-              <label className="field field--full">
-                <span>Password</span>
-                <input name="password" type="password" required />
-              </label>
-              <label className="checkbox-field field--full">
-                <input name="marketing" type="checkbox" />
-                <span>Keep me updated on launches and offers</span>
-              </label>
-              <button className="button" type="submit">
-                Create account
-              </button>
-            </form>
-          </Surface>
-        </div>
-
-        <div className="container">
-          {message ? <p className="inline-message">{message}</p> : null}
         </div>
       </section>
     </>
@@ -1748,84 +1547,41 @@ export function AccountPage() {
 }
 
 export function CartPage() {
-  const { cartItems, removeFromCart, subtotal, updateQuantity } = useStore();
-
   return (
     <>
       <PageMeta
         title="Cart"
-        description="Review your Wild Botanix basket, update quantities and move to checkout with ease."
+        description="Basket review and checkout are handled through the official Wild Botanix Shopify store."
         noindex
       />
       <section className="page-hero">
         <div className="container">
           <p className="eyebrow">Cart</p>
-          <h1>Your basket, ready when you are.</h1>
+          <h1>Continue to our secure store to review your basket.</h1>
           <p>
-            Review your favourites, update quantities and move to checkout when you're ready.
+            Orders are handled through our official Shopify store, where live stock, payments and
+            order updates are managed.
           </p>
         </div>
       </section>
 
       <section className="section">
         <div className="container cart-layout">
-          <Surface className="cart-summary">
-            <h2>Basket preview</h2>
+          <StoreHandoffCard
+            eyebrow="Secure store checkout"
+            title="Review your basket on the official store."
+            body="Basket contents, live stock and checkout are handled through the official Wild Botanix Shopify store."
+            primaryHref={getOfficialStoreSecureStoreUrl()}
+            primaryLabel="Continue to our secure store"
+          />
+
+          <Surface>
+            <h2>Why the handoff matters</h2>
             <p>
-              Items in this basket are stored in this browser for preview purposes only. They do
-              not reserve live stock or create a real order until a production commerce backend is
-              connected.
+              This front-end site is here to tell the brand story and guide discovery. When you are
+              ready to buy, the official store handles the live transaction.
             </p>
           </Surface>
-
-          {cartItems.length > 0 ? (
-            <>
-              <div className="cart-items">
-                {cartItems.map((item) => (
-                  <Surface className="cart-item" key={item.key}>
-                    <img src={item.image} alt={item.title} />
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>{item.variantTitle}</p>
-                      <PriceStack price={item.price} compareAt={null} compact />
-                    </div>
-                    <QuantityControl value={item.quantity} onChange={(value) => updateQuantity(item.key, value)} />
-                    <button className="text-button" type="button" onClick={() => removeFromCart(item.key)}>
-                      Remove
-                    </button>
-                  </Surface>
-                ))}
-              </div>
-
-              <Surface className="cart-summary">
-                <h2>Order summary</h2>
-                <div className="summary-row">
-                  <span>Subtotal</span>
-                  <strong>{formatCurrency(subtotal)}</strong>
-                </div>
-                <div className="summary-row">
-                  <span>Delivery</span>
-                  <span>Calculated at checkout</span>
-                </div>
-                <div className="summary-row">
-                  <span>Free UK delivery</span>
-                  <span>Orders over GBP 50</span>
-                </div>
-                <Link className="button" to="/checkout">
-                  Continue to checkout
-                </Link>
-                <Link className="button button--ghost" to="/shop">
-                  Continue shopping
-                </Link>
-              </Surface>
-            </>
-          ) : (
-            <EmptyState
-              title="Your cart is empty"
-              body="Explore herbal teas, sea moss, oils and self-care to build your basket."
-              cta={{ label: "Shop products", href: "/shop" }}
-            />
-          )}
         </div>
       </section>
     </>
@@ -1833,168 +1589,41 @@ export function CartPage() {
 }
 
 export function CheckoutPage() {
-  const { cartItems, customer, placeDemoOrder, subtotal } = useStore();
-  const [orderId, setOrderId] = useState("");
-
-  if (cartItems.length === 0 && !orderId) {
-    return (
-      <>
-        <PageMeta
-          title="Checkout"
-          description="Review your Wild Botanix order details before you place your order."
-          noindex
-        />
-        <section className="section">
-          <div className="container">
-            <Surface className="cart-summary">
-              <h2>Checkout preview</h2>
-              <p>
-                This checkout currently saves details on this device only. It does not process live
-                payments, create a production order, or send fulfilment updates yet.
-              </p>
-            </Surface>
-
-            <EmptyState
-              title="Your checkout is waiting for products"
-              body="Add a few Wild Botanix favourites to your basket first, then return here to complete your order."
-              cta={{ label: "Go to shop", href: "/shop" }}
-            />
-          </div>
-        </section>
-      </>
-    );
-  }
-
   return (
     <>
       <PageMeta
         title="Checkout"
-        description="Review your Wild Botanix order, enter delivery details and check out with clarity."
+        description="Payments and checkout are handled through the official Wild Botanix Shopify store."
         noindex
       />
       <section className="page-hero">
         <div className="container">
           <p className="eyebrow">Checkout</p>
-          <h1>Almost there. Review your order with ease.</h1>
+          <h1>Orders are handled through our official Shopify store.</h1>
           <p>
-            Check your delivery details, choose your preferred delivery speed and look over your
-            order before placing it.
+            Continue to the official Wild Botanix store for live stock, secure payments, delivery
+            details and order confirmation.
           </p>
         </div>
       </section>
 
       <section className="section">
         <div className="container checkout-layout">
-          <Surface className="cart-summary">
-            <h2>Checkout preview</h2>
-            <p>
-              This checkout currently saves details on this device only. It does not process live
-              payments, create a production order, or send fulfilment updates yet.
-            </p>
-          </Surface>
+          <StoreHandoffCard
+            eyebrow="Secure checkout"
+            title="Continue to our secure store to place your order."
+            body="Payments, checkout, delivery details and order confirmation all live in the official Wild Botanix Shopify store."
+            primaryHref={getOfficialStoreSecureStoreUrl()}
+            primaryLabel="Continue to our secure store"
+          />
 
           <Surface>
-            <h2>Delivery details</h2>
-            {!orderId ? (
-              <form
-                className="form-grid"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const formData = new FormData(event.currentTarget);
-                  const nextOrderId = placeDemoOrder({
-                    shippingAddress: {
-                      label: "Checkout",
-                      firstName: String(formData.get("firstName") ?? ""),
-                      lastName: String(formData.get("lastName") ?? ""),
-                      line1: String(formData.get("line1") ?? ""),
-                      line2: String(formData.get("line2") ?? ""),
-                      city: String(formData.get("city") ?? ""),
-                      postcode: String(formData.get("postcode") ?? ""),
-                      country: String(formData.get("country") ?? "United Kingdom"),
-                    },
-                  });
-                  setOrderId(nextOrderId);
-                }}
-              >
-                <label className="field">
-                  <span>Email</span>
-                  <input defaultValue={customer?.email ?? ""} name="email" required type="email" />
-                </label>
-                <label className="field">
-                  <span>Phone</span>
-                  <input defaultValue={customer?.phone ?? ""} name="phone" />
-                </label>
-                <label className="field">
-                  <span>First name</span>
-                  <input defaultValue={customer?.savedAddress?.firstName ?? customer?.firstName ?? ""} name="firstName" required />
-                </label>
-                <label className="field">
-                  <span>Last name</span>
-                  <input defaultValue={customer?.savedAddress?.lastName ?? customer?.lastName ?? ""} name="lastName" required />
-                </label>
-                <label className="field field--full">
-                  <span>Address line 1</span>
-                  <input defaultValue={customer?.savedAddress?.line1 ?? ""} name="line1" required />
-                </label>
-                <label className="field field--full">
-                  <span>Address line 2</span>
-                  <input defaultValue={customer?.savedAddress?.line2 ?? ""} name="line2" />
-                </label>
-                <label className="field">
-                  <span>Town / city</span>
-                  <input defaultValue={customer?.savedAddress?.city ?? ""} name="city" required />
-                </label>
-                <label className="field">
-                  <span>Postcode</span>
-                  <input defaultValue={customer?.savedAddress?.postcode ?? ""} name="postcode" required />
-                </label>
-                <label className="field">
-                  <span>Country</span>
-                  <input defaultValue={customer?.savedAddress?.country ?? "United Kingdom"} name="country" required />
-                </label>
-                <label className="field">
-                  <span>Delivery speed</span>
-                  <select name="deliverySpeed" defaultValue="standard">
-                    <option value="standard">Standard UK delivery</option>
-                    <option value="express">Express UK delivery</option>
-                  </select>
-                </label>
-                <button className="button" type="submit">
-                  Confirm order details
-                </button>
-              </form>
-            ) : (
-              <EmptyState
-                title="Thank you for your order"
-                body="Your order details have been saved and you can review everything from your account area."
-                cta={{ label: "View account", href: "/account" }}
-              />
-            )}
-          </Surface>
-
-          <Surface className="cart-summary">
-            <h2>Order summary</h2>
-            {cartItems.map((item) => (
-              <div className="checkout-item" key={item.key}>
-                <span>
-                  {item.title} x {item.quantity}
-                </span>
-                <strong>{formatCurrency(item.price * item.quantity)}</strong>
-              </div>
-            ))}
-            <div className="summary-row">
-              <span>Subtotal</span>
-              <strong>{formatCurrency(subtotal)}</strong>
-            </div>
-            <div className="summary-row">
-              <span>Free UK delivery</span>
-              <span>Orders over GBP 50</span>
-            </div>
-            <div className="pill-row pill-row--wrap">
-              <span className="pill">Herbal teas & sea moss</span>
-              <span className="pill">Plant-led ingredients</span>
-              <span className="pill">Calm daily rituals</span>
-            </div>
+            <h2>What is handled there</h2>
+            <ul className="list">
+              <li>Live product availability and current pricing.</li>
+              <li>Secure payments and confirmed checkout.</li>
+              <li>Order status, customer details and fulfilment updates.</li>
+            </ul>
           </Surface>
         </div>
       </section>

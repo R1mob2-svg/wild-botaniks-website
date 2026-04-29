@@ -129,6 +129,46 @@ const formatter = new Intl.NumberFormat("en-GB", {
 
 export const formatCurrency = (value: number) => formatter.format(value);
 
+export const officialStoreBaseUrl = "https://wildbotanix.co.uk";
+
+const officialStoreTrackingParams = {
+  utm_source: "new_domain",
+  utm_medium: "website",
+  utm_campaign: "world_botanics_launch",
+} as const;
+
+export const buildOfficialStoreUrl = (
+  path = "/",
+  extraParams?: Record<string, string | number | boolean | null | undefined>,
+) => {
+  const url = new URL(path, officialStoreBaseUrl);
+
+  Object.entries(officialStoreTrackingParams).forEach(([key, value]) => {
+    url.searchParams.set(key, value);
+  });
+
+  if (extraParams) {
+    Object.entries(extraParams).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === "") {
+        return;
+      }
+
+      url.searchParams.set(key, String(value));
+    });
+  }
+
+  return url.toString();
+};
+
+export const getOfficialStoreShopUrl = () => buildOfficialStoreUrl("/");
+export const getOfficialStoreCollectionsUrl = () => buildOfficialStoreUrl("/");
+export const getOfficialStoreCollectionUrl = (handle: string) =>
+  buildOfficialStoreUrl(`/collections/${handle}`);
+export const getOfficialStoreProductUrl = (product: Pick<Product, "handle"> | string) =>
+  buildOfficialStoreUrl(`/products/${typeof product === "string" ? product : product.handle}`);
+export const getOfficialStoreAccountUrl = () => buildOfficialStoreUrl("/account");
+export const getOfficialStoreSecureStoreUrl = () => buildOfficialStoreUrl("/");
+
 const productSlugOverrides: Record<string, string> = {
   "untitled-9mar_10-27": "lime-flower-herbal-tea",
   "untitled-8mar_16-50": "focus-flow-herbal-tea",
@@ -587,21 +627,21 @@ export const sourceProofCards = [
     title: "Rooted in real rituals",
     body:
       "Explore a considered edit of herbal teas, sea moss, botanical oils and self-care essentials chosen for calmer daily routines.",
-    href: "/collections",
-    cta: "Explore collections",
+    href: getOfficialStoreCollectionsUrl(),
+    cta: "View the full product range",
   },
   {
     title: `${products.length} products to explore`,
     body: `From single-herb teas to batana oil and sea moss, the range is arranged across ${collections.length} easy-to-shop collections.`,
-    href: "/shop",
-    cta: "Shop all products",
+    href: getOfficialStoreShopUrl(),
+    cta: "Shop securely through our official store",
   },
   {
-    title: "A calmer path to checkout",
+    title: "Orders handled through the official store",
     body:
-      "Move from collections to product details and on to your basket in a clear, comfortable shopping flow.",
-    href: "/checkout",
-    cta: "View checkout",
+      "When you are ready to order, continue to the official Shopify store for live stock, checkout and order updates.",
+    href: getOfficialStoreSecureStoreUrl(),
+    cta: "Continue to our secure store",
   },
 ];
 
@@ -615,8 +655,8 @@ export const ritualSteps = [
     body: "Each product page brings together ingredients, key highlights and ritual notes so you can choose with confidence.",
   },
   {
-    title: "Build your basket",
-    body: "Add your favourites, review your order and move toward checkout in a calm, easy flow.",
+    title: "Continue securely",
+    body: "When you are ready to order, continue to our secure store where stock, checkout and order updates are handled.",
   },
 ];
 
@@ -811,7 +851,7 @@ export const faqs = [
   {
     question: "Can I create an account for faster checkout?",
     answer:
-      "Yes. You can create an account to save your delivery details, manage your information and keep future orders easier to review.",
+      "Yes. Orders and customer accounts are handled through the official Wild Botanix Shopify store, where you can save your details and review your orders securely.",
   },
 ];
 

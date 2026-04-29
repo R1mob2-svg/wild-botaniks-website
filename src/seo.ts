@@ -12,6 +12,8 @@ import {
 
 type EnvLike = {
   VITE_SITE_URL?: string;
+  VERCEL_URL?: string;
+  VERCEL_PROJECT_PRODUCTION_URL?: string;
 };
 
 type ImportMetaWithEnv = ImportMeta & {
@@ -36,8 +38,31 @@ export type SeoRouteEntry = {
 };
 
 const env = (import.meta as ImportMetaWithEnv | undefined)?.env;
+const processEnv = (
+  globalThis as typeof globalThis & {
+    process?: {
+      env?: {
+        VITE_SITE_URL?: string;
+        VERCEL_URL?: string;
+        VERCEL_PROJECT_PRODUCTION_URL?: string;
+      };
+    };
+  }
+).process?.env;
+const browserOrigin =
+  typeof window !== "undefined" && window.location.origin ? window.location.origin : undefined;
 
-export const siteOrigin = (env?.VITE_SITE_URL ?? "https://wildbotanix.co.uk").replace(/\/$/, "");
+const resolvedSiteOrigin =
+  env?.VITE_SITE_URL ??
+  processEnv?.VITE_SITE_URL ??
+  (processEnv?.VERCEL_URL ? `https://${processEnv.VERCEL_URL}` : undefined) ??
+  (processEnv?.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${processEnv.VERCEL_PROJECT_PRODUCTION_URL}`
+    : undefined) ??
+  browserOrigin ??
+  "https://example.invalid";
+
+export const siteOrigin = resolvedSiteOrigin.replace(/\/$/, "");
 export const siteName = siteData.brand.name;
 export const siteLocale = "en_GB";
 export const siteDescription = siteData.brand.subheading;
@@ -458,7 +483,7 @@ export const getSeoRouteEntries = (): SeoRouteEntry[] => {
       path: "/account",
       title: "Account",
       description:
-        "Create a Wild Botanix account or sign in to manage saved details and orders.",
+        "Customer accounts and order history are handled through the official Wild Botanix Shopify store.",
       image: siteData.brand.socialImage,
       openGraphType: "website",
       noindex: true,
@@ -467,7 +492,7 @@ export const getSeoRouteEntries = (): SeoRouteEntry[] => {
       path: "/cart",
       title: "Cart",
       description:
-        "Review your Wild Botanix basket, update quantities and move to checkout with ease.",
+        "Basket review and checkout are handled through the official Wild Botanix Shopify store.",
       image: siteData.brand.socialImage,
       openGraphType: "website",
       noindex: true,
@@ -476,7 +501,7 @@ export const getSeoRouteEntries = (): SeoRouteEntry[] => {
       path: "/checkout",
       title: "Checkout",
       description:
-        "Review your Wild Botanix order, enter delivery details and check out with clarity.",
+        "Payments and checkout are handled through the official Wild Botanix Shopify store.",
       image: siteData.brand.socialImage,
       openGraphType: "website",
       noindex: true,
@@ -485,7 +510,7 @@ export const getSeoRouteEntries = (): SeoRouteEntry[] => {
           path: "/checkout",
           title: "Checkout",
           description:
-            "Review your Wild Botanix order, enter delivery details and check out with clarity.",
+            "Payments and checkout are handled through the official Wild Botanix Shopify store.",
           image: siteData.brand.socialImage,
           type: "CheckoutPage",
         }),

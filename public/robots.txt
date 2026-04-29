@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wildbotanix.co.uk/sitemap.xml
+Sitemap: https://world-botanics.vercel.app/sitemap.xml

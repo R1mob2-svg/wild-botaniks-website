@@ -14,7 +14,6 @@ import {
   ProductPage,
   ShopPage,
 } from "./pages";
-import { StoreProvider } from "./store";
 import { Layout } from "./ui";
 
 export function AppRoutes() {
@@ -42,11 +41,9 @@ export function AppRoutes() {
 
 function App() {
   return (
-    <StoreProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </StoreProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 

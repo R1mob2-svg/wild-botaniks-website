@@ -26,3 +26,5 @@ rollback-snapshots/
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
